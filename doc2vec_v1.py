@@ -19,10 +19,10 @@ import random
 
 ############ GLOBAL VARIABLES ############ 
 
-docpath="/Users/gputty/apps/asciimath/sof/docs/"
+docpath="./apps/asciimath/sof/docs/"
 filename = "output.txt"
 
-modeldocpath="/Users/gputty/apps/asciimath/sof/model/"
+modeldocpath="./apps/asciimath/sof/model/"
 modelfilename= modeldocpath + "doc2vec.model"
 
 labledDocs = []

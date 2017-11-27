@@ -16,13 +16,14 @@ import nltk
 from nltk.tokenize import word_tokenize
 import re
 import random
+from random import shuffle
 
 ############ GLOBAL VARIABLES ############ 
 
-docpath="./apps/asciimath/sof/docs/"
+docpath="./asciimath/sof/docs/"
 filename = "output.txt"
 
-modeldocpath="./apps/asciimath/sof/model/"
+modeldocpath="./asciimath/sof/model/"
 modelfilename= modeldocpath + "doc2vec.model"
 
 labledDocs = []
@@ -100,9 +101,9 @@ def findSimilarByTakingInputline():
         print " "
         print 'Finding similar documents to: ' , new_doc
         print    
-        sims = model.docvecs.most_similar(positive=[model.infer_vector(new_doc.split())], topn=3)
-        #sims = model.docvecs.most_similar(positive=[model.infer_vector(new_doc)], topn=3)
-        #sims = model.docvecs.most_similar([0], topn=3)
+        #sims = model.docvecs.most_similar(positive=[model.infer_vector(new_doc.split())], topn=3)
+        ## below is giving better results
+        sims = model.docvecs.most_similar(positive=[model.infer_vector(new_doc)], topn=3)        
         
         printSimOutput(sims)
 
@@ -119,6 +120,11 @@ def findSimilarByRandomNumber():
         print ("finding similar doc for: " + text )
         sims = model.docvecs.most_similar([rand], topn=3)
         printSimOutput(sims)
+
+
+def sentences_perm():
+    shuffle(labledDocs)
+    return labledDocs
 
 ############ END OF FUNCTIONS ############ 
 
@@ -149,14 +155,14 @@ else:
 
     #debugprint(labledDocs)
 
-    model = gensim.models.Doc2Vec(size=10, window=10, min_count=5, workers=8,alpha=0.025, min_alpha=0.025)
+    model = gensim.models.Doc2Vec(size=50, window=10, min_count=2, workers=8,alpha=0.025, min_alpha=0.025)
     model.build_vocab(labledDocs)
 
     for epoch in range(20):
-        model.train(labledDocs,total_examples=model.corpus_count, epochs = model.iter)
+        model.train(sentences_perm(),total_examples=model.corpus_count, epochs = model.iter)
         model.alpha -= 0.002 # decrease the learning rate
         model.min_alpha = model.alpha # fix the learning rate, no deca
-        model.train(labledDocs,total_examples=model.corpus_count, epochs = model.iter)
+        model.train(sentences_perm(),total_examples=model.corpus_count, epochs = model.iter)
 
     model.save(modelfilename)
 

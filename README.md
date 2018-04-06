@@ -1,7 +1,15 @@
 # proj1
 project 1
 
-how to use this python program. 
+How to use this python program. 
+
+step#0
+mkdir temp
+cd temp 
+git clone https://github.com/gputti/proj1.git
+mkdir docs
+mkdir model
+<< copy your dataset to docs folder>>
 
 step#1 
 make sure all GLOBAL variables are pointing to right files. 
